@@ -2,6 +2,8 @@
 
 A collection of bash scripts for managing tmux sessions, with a pre-configured setup featuring vim-style navigation and a clean status bar.
 
+*Personal config to sync my tmux setup across machines and accounts.*
+
 ## Features
 
 - Quick session creation and management
