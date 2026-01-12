@@ -2,7 +2,7 @@
 
 A collection of bash scripts for managing tmux sessions, with a pre-configured setup featuring vim-style navigation and a clean status bar.
 
-*Personal config to sync my tmux setup across machines and accounts.*
+![Personal config](https://img.shields.io/badge/Personal%20config-red) *to sync my tmux setup across machines and accounts.*
 
 ## Features
 
