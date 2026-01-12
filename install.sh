@@ -34,6 +34,51 @@ else
     echo "iTerm2 installed."
 fi
 
+# Install TextMate
+if [ -d "/Applications/TextMate.app" ]; then
+    echo "TextMate is already installed."
+else
+    echo "Installing TextMate..."
+    brew install --cask textmate
+    echo "TextMate installed."
+fi
+
+# Install micro (terminal editor - familiar shortcuts)
+if command -v micro &> /dev/null; then
+    echo "micro is already installed."
+else
+    echo "Installing micro..."
+    brew install micro
+    echo "micro installed."
+fi
+
+# Install neovim (terminal editor - powerful)
+if command -v nvim &> /dev/null; then
+    echo "neovim is already installed."
+else
+    echo "Installing neovim..."
+    brew install neovim
+    echo "neovim installed."
+fi
+
+# Install tpm (tmux plugin manager)
+if [ -d ~/.tmux/plugins/tpm ]; then
+    echo "tpm (tmux plugin manager) is already installed."
+else
+    echo "Installing tpm (tmux plugin manager)..."
+    git clone https://github.com/tmux-plugins/tpm ~/.tmux/plugins/tpm
+    echo "tpm installed."
+fi
+
+# Install tmux plugins via tpm (after config is linked)
+install_tmux_plugins() {
+    if [ -f ~/.tmux/plugins/tpm/bin/install_plugins ]; then
+        echo "Installing tmux plugins..."
+        bash ~/.tmux/plugins/tpm/bin/install_plugins
+        echo "tmux plugins installed."
+    fi
+}
+
 echo ""
 
 # Link tmux config if it exists
@@ -49,6 +94,9 @@ if [ -f "$SCRIPT_DIR/tmux.conf" ]; then
     ln -sf "$SCRIPT_DIR/tmux.conf" ~/.tmux.conf
     echo "  Config linked!"
 fi
+
+# Install tmux plugins (now that config is linked)
+install_tmux_plugins
 
 # Make scripts executable
 chmod +x "$SCRIPT_DIR"/*.sh 2>/dev/null || true
@@ -66,3 +114,8 @@ echo "  Ctrl-b d     - Detach from session"
 echo "  Ctrl-b c     - New window"
 echo "  Ctrl-b %     - Split vertical"
 echo "  Ctrl-b \"     - Split horizontal"
+echo ""
+echo "Session save/restore:"
+echo "  Ctrl-b I       - Install plugins (run once after first install)"
+echo "  Ctrl-b Ctrl-s  - Save session"
+echo "  Ctrl-b Ctrl-r  - Restore session"
