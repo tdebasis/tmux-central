@@ -61,6 +61,15 @@ else
     echo "neovim installed."
 fi
 
+# Install glow (terminal markdown renderer)
+if command -v glow &> /dev/null; then
+    echo "glow is already installed."
+else
+    echo "Installing glow..."
+    brew install glow
+    echo "glow installed."
+fi
+
 # Install tpm (tmux plugin manager)
 if [ -d ~/.tmux/plugins/tpm ]; then
     echo "tpm (tmux plugin manager) is already installed."
