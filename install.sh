@@ -61,15 +61,6 @@ else
     echo "neovim installed."
 fi
 
-# Install glow (terminal markdown renderer)
-if command -v glow &> /dev/null; then
-    echo "glow is already installed."
-else
-    echo "Installing glow..."
-    brew install glow
-    echo "glow installed."
-fi
-
 # Install tpm (tmux plugin manager)
 if [ -d ~/.tmux/plugins/tpm ]; then
     echo "tpm (tmux plugin manager) is already installed."
@@ -107,6 +98,37 @@ fi
 # Install tmux plugins (now that config is linked)
 install_tmux_plugins
 
+# Link neovim config if it exists
+if [ -d "$SCRIPT_DIR/nvim" ]; then
+    echo "Linking nvim config to ~/.config/nvim..."
+
+    # Create .config if it doesn't exist
+    mkdir -p ~/.config
+
+    # Backup existing config if present
+    if [ -d ~/.config/nvim ] && [ ! -L ~/.config/nvim ]; then
+        echo "  Backing up existing ~/.config/nvim to ~/.config/nvim.backup"
+        mv ~/.config/nvim ~/.config/nvim.backup
+    fi
+
+    ln -sfn "$SCRIPT_DIR/nvim" ~/.config/nvim
+    echo "  Config linked!"
+    echo "  Run 'nvim' once to install plugins automatically."
+fi
+
+# Add nvimr alias to .zshrc
+if [ -f ~/.zshrc ]; then
+    if ! grep -q "alias nvimr=" ~/.zshrc; then
+        echo "Adding nvimr alias to ~/.zshrc..."
+        echo "" >> ~/.zshrc
+        echo "# nvim readonly mode (auto-refresh)" >> ~/.zshrc
+        echo "alias nvimr='nvim -R'" >> ~/.zshrc
+        echo "  Alias added! Run 'source ~/.zshrc' or restart terminal."
+    else
+        echo "nvimr alias already exists in ~/.zshrc"
+    fi
+fi
+
 # Make scripts executable
 chmod +x "$SCRIPT_DIR"/*.sh 2>/dev/null || true
 
@@ -128,3 +150,6 @@ echo "Session save/restore:"
 echo "  Ctrl-b I       - Install plugins (run once after first install)"
 echo "  Ctrl-b Ctrl-s  - Save session"
 echo "  Ctrl-b Ctrl-r  - Restore session"
+echo ""
+echo "Markdown viewing:"
+echo "  nvimr file.md    - View markdown (readonly, auto-refresh)"
